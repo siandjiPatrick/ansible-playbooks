@@ -2,8 +2,9 @@
 
 - name: My first playbook
   hosts: localhost
-
+  gather_facts: True
   tasks:
           - name: test connectivity
             setup:
-
+          - debug:
+              var:  ansible_os_family
