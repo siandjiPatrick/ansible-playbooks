@@ -11,5 +11,5 @@
         var:  ansible_os_family
     
     - name: print os family
-          debug:
-            msg:  "ansible awx job-template work fine"
+      debug:
+        msg:  "ansible awx job-template work fine"
