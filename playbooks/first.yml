@@ -1,11 +1,11 @@
 ---
 
-- name: My first playbook
-  hosts: localhost
+- name: test awx playbook
+  hosts: all
   gather_facts: True
   tasks:
-          - name: test connectivity
-            setup:
-          - name: print os family
-            debug:
-              var:  ansible_os_family
+    - name: test connectivity
+      setup:
+    - name: print os family
+      debug:
+        var:  ansible_os_family
