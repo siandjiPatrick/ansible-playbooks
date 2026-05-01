@@ -6,5 +6,6 @@
   tasks:
           - name: test connectivity
             setup:
-          - debug:
+          - name: print os family
+            debug:
               var:  ansible_os_family
