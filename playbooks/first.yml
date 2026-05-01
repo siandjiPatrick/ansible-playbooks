@@ -5,5 +5,5 @@
 
   tasks:
           - name: test connectivity
-            ping:
+            setup:
 
