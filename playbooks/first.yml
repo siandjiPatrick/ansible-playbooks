@@ -17,7 +17,7 @@
         path: /root/hello-world.txt
         block: |
         ceci est un text genere avec
-        awx platform
+        awx platform.
 
         made by patrick
         insertbefore: "BOF"
