@@ -53,7 +53,7 @@
 
 - name: echou si le port  est deja occupe
   fail:
-    msg: "le port {{ web_port }} est deja occupe. veillez executer la commande  fuser -k {{ webport }}/tcp"
+    msg: "le port {{ web_port }} est deja occupe. veillez executer la commande  fuser -k {{ web_port }}/tcp"
   #failed_when: port_check.rc == 0
   failed_when: false
 
