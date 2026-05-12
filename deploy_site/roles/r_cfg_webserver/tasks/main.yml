@@ -23,9 +23,9 @@
     state: started
     enabled: yes
 
-- name: ouvrir le port 80
+- name: ouvrir le port ou l application sera expose
   ansible.posix.firewalld:
-    port: 80/tcp
+    port: "{{ web_port}}/tcp"
     immediate: yes
     permanent: yes 
     state: enabled 
@@ -36,8 +36,8 @@
   register: nginx_test
   changed_when: false
 
-- name: Verifier si le port 80 est deja occupe
-  shell: "ss -tupln | grep -i :80"
+- name: Verifier si le port est deja occupe
+  shell: "ss -tupln | grep -i :{{ web_port }}"
   register: port_check
   failed_when: false
 
@@ -45,14 +45,14 @@
   debug:
     var: "{{ port_check }}"
 
-- name: echou si le port 80 est deja occupe
+- name: echou si le port  est deja occupe
   fail:
-    msg: "le port 80 est deja occupe. veillez executer la commande  fuser -k 80/tcp"
+    msg: "le port {{ web_port }} est deja occupe. veillez executer la commande  fuser -k {{ webport }}/tcp"
   #failed_when: port_check.rc == 0
   failed_when: false
 
-- name: arrete le process qui utilise le port 80
-  shell: "fuser -k 80/tcp"
+- name: arrete le process qui utilise le port 
+  shell: "fuser -k {{ web_port }}/tcp"
 
 - name: verifier que nginx est demarre
   service:
