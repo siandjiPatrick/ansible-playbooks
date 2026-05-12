@@ -2,11 +2,17 @@
 #- tasks: 
 - name: Affiche les variables par defauts
   debug:
-     var: pck.name
+     var: loop_control_var
   loop:
-    "{{ packages }}"
+    - "{{ packages }}"
+    - "{{ formateur }}"
+    - "{{ modules }}"
+    - "{{ www_root_path }}"
+    - "{{ web_port }}"
+    - "{{ domain }}"
+    - "{{ sous_domain}}"
   loop_control:
-    loop_var: pck
+    loop_var: loop_control_var
 
 - name: installation  des packages 
   package:
@@ -17,7 +23,7 @@
   loop_control:
     loop_var: package
     label: "{{ package.name }}"
-- name: Se rasurer que firewalld est demarre
+- name: Se rasurer que firewalld est actif
   service:
     name: firewalld
     state: started
