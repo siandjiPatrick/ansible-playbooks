@@ -1,24 +1,9 @@
 ---
 
-- name: test awx playbook
+- name: test github Communication
   hosts: all
   gather_facts: True
   tasks:
-    - name: test connectivity
-      setup:
-    - name: print os family of the host
+    - name: print Hello world
       debug:
-        var:  ansible_os_family
-    - name: print os family
-      debug:
-        msg: "ansible awx job-template work fine"
-    - name: Create file hello-world 
-      blockinfile: 
-        path: /root/hello-world.txt
-        block: |
-          ceci est un text genere avec
-          awx platform
-          made by patrick
-        insertbefore: "BOF"
-        create: yes
         
