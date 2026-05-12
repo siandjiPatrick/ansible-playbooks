@@ -1,0 +1,112 @@
+---
+#- tasks: 
+- name: Affiche les variables par defauts
+  debug:
+     var: pck.name
+  loop:
+    "{{ packages }}"
+  loop_control:
+    loop_var: pck
+
+- name: installation  des packages 
+  package:
+    name: "{{ package.name }}"
+    state: "{{ package.status }}"
+  loop:
+    "{{ packages }}"
+  loop_control:
+    loop_var: package
+    label: "{{ package.name }}"
+- name: Se rasurer que firewalld est demarre
+  service:
+    name: firewalld
+    state: started
+    enabled: yes
+
+- name: ouvrir le port 80
+  ansible.posix.firewalld:
+    port: 80/tcp
+    immediate: yes
+    permanent: yes 
+    state: enabled 
+
+
+- name: Test nginx config
+  command: "nginx -t"
+  register: nginx_test
+  changed_when: false
+
+- name: Verifier si le port 80 est deja occupe
+  shell: "ss -tupln | grep -i :80"
+  register: port_check
+  failed_when: false
+
+- name: Print result de la verification de ports
+  debug:
+    var: "{{ port_check }}"
+
+- name: echou si le port 80 est deja occupe
+  fail:
+    msg: "le port 80 est deja occupe. veillez executer la commande  fuser -k 80/tcp"
+  #failed_when: port_check.rc == 0
+  failed_when: false
+
+- name: arrete le process qui utilise le port 80
+  shell: "fuser -k 80/tcp"
+
+- name: verifier que nginx est demarre
+  service:
+    name: nginx
+    state: started
+    enabled:  true
+
+- name: creation du dossier img
+  file:
+    path: "{{ www_root_path }}/img"
+    state: directory
+
+- name: copier la photo de profile dans le dossier img
+  copy:
+    src: "../templates/img/photo.jpeg"
+    dest: "{{ www_root_path }}/img/photo.jpeg"
+
+- name: creation des dossiers
+  file:
+    path: "{{ www_root_path }}/{{ module.name}}"
+    state: directory
+    mode: "0755"
+    owner: root
+    group: root
+  loop: "{{ modules }}"
+  loop_control:
+    loop_var: module
+    label: "{{ module.name }}"
+     
+- name: Copy de la page d acceuil sur le serveur
+  template:
+    src: "../templates/index.html.j2"
+    dest: "{{ www_root_path }}/index.html"
+
+- name: creation des differentes pages 
+  copy:
+    dest: "{{ www_root_path }}/{{ module.name }}/index.html"
+    content: |
+      <h1>Maitrisez {{ module.name }} de A a Z </h1>
+  loop: "{{ modules }}"
+  loop_control:
+    loop_var: module
+    label: "{{ module.name }}"
+ 
+- name: ajouter les entree dans /etc/hosts
+  ansible.builtin.lineinfile:
+    path: /etc/hosts
+    line: "{{ ansible_default_ipv4.address }} {{ sous_domain }}.{{ domain.env.dev }}"
+
+- name: configure nginx
+  template:
+    src: "../templates/nginx.conf.j2"
+    dest: "/etc/nginx/conf.d/site_web.conf"
+  notify: redemarre nginx
+
+- name: tester la configuration nginx
+  shell: "nginx -t"

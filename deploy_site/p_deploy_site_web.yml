@@ -1,0 +1,28 @@
+#@Description: 
+#  Ce playbook a ete realise dans le cadre 
+#  du bootcamp devops - Module: ansible
+#              
+#              
+#@Objectif:    
+#   l objectif de ce playbook est de deployer un site 
+#   web de A a Z et de l exposer a l aide nginx
+#
+#@formateur:
+#  @nom:  Siandji Patrick
+#  @poste: devops engineer
+#  @location: allemagne
+#  @Email: siandjipatrick@gmail.com
+#
+#@date: 10 mai 2026
+#
+- name: >
+    Deployement d un site Web
+    de A a Z(formation Ansible)
+  hosts: webservers
+  become: true
+  gather_facts: true
+  any_errors_fatal: true
+  remote_user: patrick
+  
+  roles:
+    - name: r_cfg_webserver

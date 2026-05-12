@@ -1,0 +1,33 @@
+---
+# defaults file for r_cfg_webserver
+packages:
+  - name: nginx
+    status: present
+  - name: firewalld
+    status: present
+  - name: curl
+    status: present
+  - name: psmisc
+    status: present
+  - name: lsof
+    status: present
+
+formateur:
+  name: siandji patrick
+  role: devops engineer
+  email: siandjipatrick@yahoo.fr
+  specialite: ansible / linux / Homelab / automation
+
+modules:
+  - name: ansible
+  - name: terraform
+  - name: cloud
+
+www_root_path: "/var/www"
+web_port: 80
+domain:
+  env:
+    dev: local
+    prod: siandji.com
+sous_domain: ansible-formation
+

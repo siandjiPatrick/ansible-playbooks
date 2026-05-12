@@ -1,0 +1,21 @@
+server {
+     listen {{ web_port }};
+     server_name {{ sous_domain }}.{{ domain.env.prod }} {{ sous_domain }}.{{ domain.env.dev }};
+    
+     root {{ www_root_path }};
+
+     location / {
+        index index.html;
+      
+     }
+
+     {% for module in modules %}
+
+     location /{{ module.name }}/ {
+       alias {{ www_root_path }}/{{ module.name }}/;
+       index index.html;
+     }
+
+     {% endfor %}
+ 
+}
