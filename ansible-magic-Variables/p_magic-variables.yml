@@ -1,0 +1,21 @@
+---
+- name: Magic Variables
+  hosts: all
+  gather_facts: false
+
+  tasks:
+    - name: Print some magic variable
+      ansible.builtin.debug:
+        var: "{{ item }}"
+      loop:
+        - ansible_config_file  # full path of uses ansible configuration file
+        - playbook_dir         # the path of the playbook directory
+        - inventory_dir
+        - inventory_file
+        - ansible_check_mode
+        - ansible_diff_mode
+        - ansible_forks
+        - ansible_verbosity
+        - inventory_hostname
+        - ansible_play_hosts
+        - ansible_version
